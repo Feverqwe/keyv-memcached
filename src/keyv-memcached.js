@@ -12,21 +12,14 @@ class KeyvMemcached extends EventEmitter {
       if (m) {
         hosts = m[1];
       }
+      hosts = {hosts};
     }
 
-    options = Object.assign(
-      {},
-      (typeof hosts === 'string') ? { hosts: hosts } : hosts,
-      options
-    );
+    options = Object.assign({}, hosts, options);
 
     if (!options.client) {
       if (!options.hosts) {
         options.hosts = '127.0.0.1:11211';
-      }
-
-      if (Array.isArray(options.hosts)) {
-        options.hosts = options.hosts.join(',');
       }
 
       options.client = new Memcached(options.hosts, options);
