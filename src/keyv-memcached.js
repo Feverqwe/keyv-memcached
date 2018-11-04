@@ -37,12 +37,9 @@ class KeyvMemcached extends EventEmitter {
     this.client = client;
 
     this.clientMethods = ['get', 'set', 'del', 'flush'].reduce((obj, method) => {
-      obj[method] = function () {
-        const args = Array.prototype.slice.call(arguments);
+      obj[method] = (...args) => {
         return new Promise((resolve, reject) => {
-          args.push((err, result) => {
-            err ? reject(err) : resolve(result)
-          });
+          args.push((err, result) => err ? reject(err) : resolve(result));
           client[method].apply(client, args);
         });
       };
